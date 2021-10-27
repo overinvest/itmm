@@ -140,7 +140,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Algoritms.c" />
+    <ClCompile Include="menu_handler.c" />
+    <ClCompile Include="main_functions.c" />
     <ClCompile Include="Source.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Algoritms.h" />
+    <ClInclude Include="menu_handler.h" />
+    <ClInclude Include="main_functions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
