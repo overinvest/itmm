@@ -106,8 +106,6 @@ int show_item(item** items, int* item_selected, int res, int idx) {
 	elem_callback((*items)[res].name, (*items)[res].callback);
 	exit_code = 0;
 
-	print("чтобы выйти нажмите ESC");
-
 	do {
 
 		int code = getch();
@@ -132,7 +130,7 @@ int elem_callback(char* name, int (*callback)(void)) {
 
 	callback();
 
-	print("Алгоритм выполнился, чтобы выйти напишите 0");
+	print("Алгоритм выполнился, чтобы выйти нажмите ESC");
 	return 0;
 }
 
