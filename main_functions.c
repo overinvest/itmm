@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <windows.h>
+
 
 void localize() {
 	setlocale(LC_ALL, "rus");
@@ -240,4 +242,10 @@ int string_split_smart(char* str, char* razd, char*** res) {
 		}
 	}
 	return k;
+}
+
+void SetColor(int text, int background)
+{
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, (WORD)((background << 4) | text));
 }

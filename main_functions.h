@@ -1,4 +1,5 @@
 #pragma once
+#include <wtypes.h>
 
 void localize();
 int print(const char* const _Format, ...);
@@ -12,3 +13,4 @@ int spisok_bez_povtoreniy_rate(char** name, int n, char*** list, int** rate);
 int spisok_bez_povtoreniy_sum(char** name, int n, int* ch, char*** list, int** sum);
 int string_split(char* str, char* razd, char*** res);
 int string_split_smart(char* str, char* razd, char*** res);
+void SetColor(int text, int background);

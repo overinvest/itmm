@@ -83,6 +83,81 @@ void Algoritm3() {
 	}
 }
 
+void Algoritm4() {
+
+	int N, i, len;
+	char** name;
+	char* ctrl;
+	char tmp[255];
+
+	printf("¬ведите кол-во N: ");
+	scanf("%d", &N);
+
+	name = (char**)calloc(N, sizeof(char*));
+
+	print("¬веди список");
+
+	for (i = 0; i < N; i++) {
+
+		scanf("\n");
+		fgets(tmp, 255, stdin);
+		len = strlen(tmp) + 2;
+		name[i] = (char*)calloc(len, sizeof(char));
+
+		strcpy(name[i], tmp);
+	}
+
+	print("¬ведите искомое слово");
+	scanf("\n");
+	fgets(tmp, 255, stdin);
+
+	len = strlen(tmp) + 2;
+	ctrl = (char*)calloc(len, sizeof(char));
+
+	strcpy(ctrl, tmp);
+
+	print("Ћинейный поиск %d", linear_search(name, ctrl, N));
+	//printf("Ѕинарный поиск %d\n", binary_search(name, ctrl, N));
+
+}
+
+void Algoritm5() {
+
+	int N, i, len;
+	char** name;
+	char* ctrl;
+	char tmp[255];
+
+	printf("¬ведите кол-во N: ");
+	scanf("%d", &N);
+
+	name = (char**)calloc(N, sizeof(char*));
+
+	print("¬веди список");
+
+	for (i = 0; i < N; i++) {
+
+		scanf("\n");
+		fgets(tmp, 255, stdin);
+		len = strlen(tmp) + 2;
+		name[i] = (char*)calloc(len, sizeof(char));
+
+		strcpy(name[i], tmp);
+	}
+
+	print("¬ведите искомое слово");
+	scanf("\n");
+	fgets(tmp, 255, stdin);
+
+	len = strlen(tmp) + 2;
+	ctrl = (char*)calloc(len, sizeof(char));
+
+	strcpy(ctrl, tmp);
+
+	print("Ѕинарный поиск %d", binary_search(name, ctrl, N));
+
+}
+
 void Algoritm6()
 {
 	char tmp[255];
@@ -175,5 +250,43 @@ void Algoritm8()
 	}
 }
 
+void Algoritm9()
+{
+	char data[100];
+	char** result;
 
+	print("¬ведите строку");
+	fgets(data, 100, stdin);
 
+	int len = strlen(data) + 2;
+
+	result = (char**)calloc(len, sizeof(char*));
+
+	int k = string_split(data, " ", &result);
+
+	for (int i = 0; i < k; i++) {
+		print("[%d] %s", i, result[i]);
+	}
+
+}
+
+void Algoritm10()
+{
+	char data[100];
+	char** result;
+	char razd[] = ",/.'[]*-+? ";
+
+	print("¬ведите строку");
+	fgets(data, 100, stdin);
+
+	int len = strlen(data) + 2;
+
+	result = (char**)calloc(len, sizeof(char*));
+
+	int k = string_split_smart(data, razd, &result);
+
+	for (int i = 0; i < k; i++) {
+		print("[%d] %s", i, result[i]);
+	}
+
+}

@@ -6,22 +6,13 @@
 #include <ctype.h>
 #include "main_functions.h"
 #include "menu_handler.h"
+#include "Algoritms.h"
 
 void main()
 {	
 
-	char choise[100];
-
 	localize();
 
-	print("Привет! Добро пожаловать в бета-версию меню");
-	print("Желаете открыть меню? (Напишите y для открытия меню, или просто Enter чтобы закрыть программу)");
-	char* res = fgets(choise, 100, stdin);
+	start();
 
-	if (tolower(res[0]) == 'y') {
-		clear();
-		print("Вот меню:");
-		create_menu();
-	}
-	
 }
