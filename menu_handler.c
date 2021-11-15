@@ -3,6 +3,7 @@
 #include "main_functions.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <windows.h>
 #include "menu_handler.h"
 
 enum {
@@ -19,6 +20,51 @@ typedef struct item {
 	int is_active;
 	void (*callback)(char*);
 } item;
+
+typedef struct VKey {
+	int prev_value;
+	int value;
+	int is_released_buff;
+	int is_released;
+	int is_held;
+	int is_toggled;
+	int vkey;
+} VKey;
+
+VKey create_key(int vkey) {
+	VKey key;
+	key.prev_value = 0;
+	key.value = 0;
+	key.is_released_buff = 0;
+	key.is_released = 0;
+	key.is_held = 0;
+	key.is_toggled = 0;
+	key.vkey = vkey;
+	return key;
+}
+
+int update_key(VKey* key) {
+	(*key).prev_value = (*key).value;
+	(*key).value = GetAsyncKeyState((*key).vkey);
+
+	(*key).is_held = (*key).value < 0 ? 1 : 0;
+
+	if ((*key).is_released_buff == 0 && (*key).is_released == 1) {
+		(*key).is_released = 0;
+		(*key).is_released_buff = 0;
+	}
+
+	if ((*key).is_held == 1 && (*key).is_released_buff == 0) {
+		(*key).is_released_buff = 1;
+	}
+
+	if ((*key).is_released_buff == 1 && (*key).is_released == 0 && (*key).is_held == 0) {
+		(*key).is_released = 1;
+		(*key).is_released_buff = 0;
+	}
+
+	(*key).is_toggled = GetKeyState((*key).vkey) & 1;
+}
 
 void print_out_item(item var) {
 	print("%d. %s", var.id, var.name);
@@ -51,53 +97,88 @@ void create_item(const char* const name, const char* const description, int* idx
 	(*items) = (item*)realloc((*items), ((*idx) + 1) * sizeof(item));
 }
 
+void draw_menu(int start_index, item** items, int idx) {
+	clear();
+
+	print("Вот меню:");
+	for (int i = 0; i < idx; i++) {
+
+		if (i == start_index) {
+			SetColor(0, 15);
+			printf("%s // %s", (*items)[i].name, (*items)[i].description);
+			SetColor(15, 0);
+			printf("\n");
+		}
+		else {
+			printf("%s", (*items)[i].name);
+			printf("\n");
+		}
+
+	}
+
+	print("Нажмите Esc, если хотите закрыть меню");
+}
+
 int show_items(int* item_selected, item** items, int idx) {
 
 	int start_index = 0;
 
-	int code = -1;
+	int exit = 0;
+
+	VKey ARR_UP = create_key(VK_UP);
+	VKey ARR_DOWN = create_key(VK_DOWN);
+	VKey ARR_RIGHT = create_key(VK_RIGHT);
+	VKey ESC = create_key(VK_ESCAPE);
+
+	draw_menu(start_index, items, idx);
 
 	do {
 
-		clear();
-
-		print("Вот меню:");
-		for (int i = 0; i < idx; i++) {
-
-			if (i == start_index) {
-				SetColor(0, 15);
-				printf("%s // %s", (*items)[i].name, (*items)[i].description);
-				SetColor(15, 0);
-				printf("\n");
-			}
-			else {
-				printf("%s", (*items)[i].name);
-				printf("\n");
-			}
-
-		}
-
-		code = getch();
-
-		if ( code == ARROW) {
+		if ( ARR_DOWN.is_released != 0 ) {
 			start_index++;
+
+			if (start_index > idx - 1) {
+				start_index = 0;
+			}
+
+			draw_menu(start_index, items, idx);
 		}
 
-		if (start_index > idx - 1) {
-			start_index = 0;
+		if ( ARR_UP.is_released != 0 ) {
+			start_index--;
+
+			if (start_index < 0) {
+				start_index = idx - 1;
+			}
+
+			draw_menu(start_index, items, idx);
 		}
 
-	} while ( code != ENTER );
+		if (ESC.is_released != 0) {
+			exit = 1;
+		}
+
+		update_key(&ARR_UP);
+		update_key(&ARR_DOWN);
+		update_key(&ARR_RIGHT);
+		update_key(&ESC);
+
+	} while (ARR_RIGHT.is_released == 0 && exit == 0);
 	
-	do {
+	if (exit != 1) {
+		do {
 
-		(*items)[start_index].is_active = 1;
-		(*item_selected) = 1;
+			(*items)[start_index].is_active = 1;
+			(*item_selected) = 1;
+			clear();
+
+		} while ((*item_selected) == 0);
+
+		show_item(items, item_selected, start_index, idx);
+	}
+	else {
 		clear();
-
-	} while ( (*item_selected) == 0 );
-
-	show_item(items, item_selected, start_index, idx);
+	}
 
 	return 0;
 }

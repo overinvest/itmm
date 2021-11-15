@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <ctype.h>
+#include <windows.h>
 #include "main_functions.h"
 #include "menu_handler.h"
 #include "Algoritms.h"
