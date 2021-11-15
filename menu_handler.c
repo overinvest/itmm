@@ -15,6 +15,7 @@ enum {
 typedef struct item {
 	int id;
 	char* name;
+	char* description;
 	int is_active;
 	void (*callback)(char*);
 } item;
@@ -34,12 +35,15 @@ void clear() {
 	system("cls"); // очищаем экран
 }
 
-void create_item(const char* const name, int* idx, item** items, void(*callback)(void) ) {
-	int len = strlen(name) + 2;
+void create_item(const char* const name, const char* const description, int* idx, item** items, void(*callback)(void) ) {
+	int len_name = strlen(name) + 2;
+	int len_description = strlen(description) + 2;
 	item new_item;
-	new_item.name = (char*)calloc(len, sizeof(char));
+	new_item.name = (char*)calloc(len_name, sizeof(char));
+	new_item.description = (char*)calloc(len_description, sizeof(char));
 	new_item.id = (*idx);
 	strcpy(new_item.name, name);
+	strcpy(new_item.description, description);
 	new_item.is_active = 0;
 	new_item.callback = callback;
 	(*items)[(*idx)] = new_item;
@@ -62,12 +66,12 @@ int show_items(int* item_selected, item** items, int idx) {
 
 			if (i == start_index) {
 				SetColor(0, 15);
-				printf("%d. %s", (*items)[i].id, (*items)[i].name);
+				printf("%s // %s", (*items)[i].name, (*items)[i].description);
 				SetColor(15, 0);
 				printf("\n");
 			}
 			else {
-				printf("%d. %s", (*items)[i].id, (*items)[i].name);
+				printf("%s", (*items)[i].name);
 				printf("\n");
 			}
 
@@ -79,7 +83,7 @@ int show_items(int* item_selected, item** items, int idx) {
 			start_index++;
 		}
 
-		if (start_index > idx) {
+		if (start_index > idx - 1) {
 			start_index = 0;
 		}
 
@@ -140,16 +144,16 @@ void create_menu() {
 	int idx = 0;
 	items = (item*)malloc(1 * sizeof(item));
 
-	create_item("1 Алгоритм", &idx, &items, Algoritm1);
-	create_item("2 Алгоритм", &idx, &items, Algoritm2);
-	create_item("3 Алгоритм", &idx, &items, Algoritm3);
-	create_item("4 Алгоритм", &idx, &items, Algoritm4);
-	create_item("5 Алгоритм", &idx, &items, Algoritm5);
-	create_item("6 Алгоритм", &idx, &items, Algoritm6);
-	create_item("7 Алгоритм", &idx, &items, Algoritm7);
-	create_item("8 Алгоритм", &idx, &items, Algoritm8);
-	create_item("9 Алгоритм", &idx, &items, Algoritm9);
-	create_item("10 Алгоритм", &idx, &items, Algoritm10);
+	create_item("1 Алгоритм", "Сумма n-чисел", &idx, &items, Algoritm1);
+	create_item("2 Алгоритм", "Поиск минимального элемента массива с определением его места в массиве", &idx, &items, Algoritm2);
+	create_item("3 Алгоритм", "Отбор элемента массива по заданному признаку с формированием нового массива", &idx, &items, Algoritm3);
+	create_item("4 Алгоритм", "Линейный поиск", &idx, &items, Algoritm4);
+	create_item("5 Алгоритм", "Бинарный поиск", &idx, &items, Algoritm5);
+	create_item("6 Алгоритм", "Список без повторений", &idx, &items, Algoritm6);
+	create_item("7 Алгоритм", "Список без повторений + рейтинг", &idx, &items, Algoritm7);
+	create_item("8 Алгоритм", "Список без повторений + характеристика", &idx, &items, Algoritm8);
+	create_item("9 Алгоритм", "Разбиение текста на слова", &idx, &items, Algoritm9);
+	create_item("10 Алгоритм", "Разбиение текста на слова с разделителями", &idx, &items, Algoritm10);
 
 	int item_selected = 0;
 
